@@ -43,20 +43,23 @@ class DetectorFraudes:
         historico = self.transacoes_por_cliente[cliente_id]
         limite_60s = data_atual - timedelta(seconds=60)
 
-        while historico and historico[0] < limite_60s:
+        while historico and historico[0] <= limite_60s:
             historico.popleft()
 
         historico.append(data_atual)
 
-        if len(historico) >= 4:
+        if (
+            len(historico) >= 4
+            and (data_atual - historico[0]).total_seconds() < 60
+        ):
             tipos_fraude.append("TEMPO_60s")
 
         # Regra 3: duas transações em cidades diferentes dentro de 10 minutos.
         historico_geo = self.ultima_transacao_por_cliente[cliente_id]
         limite_10m = data_atual - timedelta(minutes=10)
 
-        while historico_geo and historico_geo[0][0] < limite_10m:
-            historico_geo.popleft()
+        while historico_geo and historico_geo[0][0] <= limite_10m:
+         historico_geo.popleft()
 
         if any(cidade_anterior != cidade for _, cidade_anterior in historico_geo):
             tipos_fraude.append("GEO_10m")
