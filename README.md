@@ -132,3 +132,20 @@ tde03-kafka-fraudes/
 └── testes/
     └── test_fraudes.py
 ```
+
+## Consulta dos dados armazenados
+
+O banco SQLite `transacoes.db` armazena as transações processadas pelo consumidor, incluindo os indicadores e tipos de fraude identificados.
+
+Para consultar os registros pelo Python, execute:
+
+```powershell
+python -c "from database import listar_transacoes; print(listar_transacoes())"
+```
+
+A consulta permite inspecionar os dados persistidos durante a execução do projeto.
+
+Para visualizar os registros diretamente, também é possível abrir `transacoes.db` em uma ferramenta compatível com SQLite, como o DB Browser for SQLite.
+
+**Observação:** o banco é gerado localmente durante a execução e não deve ser enviado ao repositório Git.
+
